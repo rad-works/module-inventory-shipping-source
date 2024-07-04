@@ -1,0 +1,30 @@
+{
+  "name": "dmi-rud/module-inventory-shipping-source",
+  "version": "0.1.0",
+  "description": "",
+  "type": "magento2-module",
+  "require": {
+    "php": "~8.1.0",
+    "magento/module-inventory-shipping": "*",
+    "magento/module-inventory-api": "*",
+    "magento/module-inventory-catalog-api": "*",
+    "magento/module-inventory-sales-api": "*",
+    "magento/module-inventory-source-selection-api": "*",
+    "magento/module-sales": "*",
+    "magento/module-shipping": "*",
+    "magento/module-store": "*",
+    "magento/framework": "103.0.*"
+  },
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "DmiRud\\InventoryShippingSource\\": ""
+    }
+  }
+}
