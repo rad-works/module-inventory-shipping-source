@@ -1,6 +1,6 @@
 {
   "name": "dmi-rud/module-inventory-shipping-source",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "type": "magento2-module",
   "require": {

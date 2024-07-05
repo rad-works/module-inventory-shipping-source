@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Quote\Model\Quote\Address\RateCollectorInterface">
+        <plugin name="DmiRud_ShipStation::collect_rates_per_source"
+                type="DmiRud\InventoryShippingSource\Plugin\Magento\Quote\Model\Quote\Address\RateCollectorInterface\CollectRatesPerInventorySource"/>
+    </type>
+</config>
