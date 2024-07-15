@@ -37,8 +37,7 @@ class SourceSelectionProvider implements SourceSelectionProviderInterface
         GetDefaultSourceSelectionAlgorithmCodeInterface $getDefaultSourceSelectionAlgorithmCode,
         RequestBuilderInterface                         $requestBuilder,
         SourceSelectionServiceInterface                 $sourceSelectionService
-    )
-    {
+    ) {
         $this->getDefaultSourceSelectionAlgorithmCode = $getDefaultSourceSelectionAlgorithmCode;
         $this->requestBuilder = $requestBuilder;
         $this->sourceSelectionService = $sourceSelectionService;

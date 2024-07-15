@@ -9,33 +9,92 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\AbstractResult;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
-use Magento\Shipping\Model\Rate\PackageResult;
+use Magento\Shipping\Model\CarrierFactoryInterface;
 use Magento\Shipping\Model\Rate\PackageResultFactory;
 use Magento\Shipping\Model\Rate\ResultFactory;
 
+/**
+ * @TODO coding standards
+ * @TODO unit/functional/integration tests
+ * @TODO new configuration: calculation algorithm, error notification, replace origin for single or any item, etc.
+ * @TODO rename module/repository
+ * @TODO test with other UPS services
+ * @TODO check what source mode is used
+ */
 class CollectRatesPerInventorySource
 {
     private const XML_PATH_USE_INVENTORY_SOURCE_ORIGIN = 'shipping/rates_collector/use_inventory_source_origin';
 
+    /**
+     * @var CarrierFactoryInterface
+     */
+    private CarrierFactoryInterface $carrierFactory;
+
+    /**
+     * @var PackageResultFactory
+     */
+    private PackageResultFactory $packageResultFactory;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private ScopeConfigInterface $scopeConfig;
+
+    /**
+     * @var ResultFactory
+     */
+    private ResultFactory $rateResultFactory;
+
+    /**
+     * @var SourceSelectionProviderInterface
+     */
+    private SourceSelectionProviderInterface $inventorySourceSelectionProvider;
+    /**
+     * @var SourceRepositoryInterface
+     */
+    private SourceRepositoryInterface $inventorySourceRepository;
+
+    /**
+     * @param CarrierFactoryInterface $carrierFactory
+     * @param PackageResultFactory $packageResultFactory
+     * @param ResultFactory $rateResultFactory
+     * @param ScopeConfigInterface $scopeConfig
+     * @param SourceSelectionProviderInterface $inventorySourceSelectionProvider
+     * @param SourceRepositoryInterface $inventorySourceRepository
+     */
     public function __construct(
-        private readonly ScopeConfigInterface             $scopeConfig,
-        private readonly PackageResultFactory             $packageResultFactory,
-        private readonly ResultFactory                    $rateResultFactory,
-        private readonly SourceSelectionProviderInterface $inventorySourceSelectionProvider,
-        private readonly SourceRepositoryInterface        $inventorySourceRepository
+        CarrierFactoryInterface          $carrierFactory,
+        PackageResultFactory             $packageResultFactory,
+        ResultFactory                    $rateResultFactory,
+        ScopeConfigInterface             $scopeConfig,
+        SourceSelectionProviderInterface $inventorySourceSelectionProvider,
+        SourceRepositoryInterface        $inventorySourceRepository
     )
     {
+        $this->carrierFactory = $carrierFactory;
+        $this->inventorySourceRepository = $inventorySourceRepository;
+        $this->inventorySourceSelectionProvider = $inventorySourceSelectionProvider;
+        $this->rateResultFactory = $rateResultFactory;
+        $this->scopeConfig = $scopeConfig;
+        $this->packageResultFactory = $packageResultFactory;
     }
 
     /**
+     * Collects rates based on request
+     *
      * @param RateCollectorInterface $subject
      * @param \Closure $proceed
      * @param RateRequest $request
      * @return RateCollectorInterface
      * @throws NoSuchEntityException
      */
-    public function aroundCollectRates(RateCollectorInterface $subject, \Closure $proceed, RateRequest $request): RateCollectorInterface
+    public function aroundCollectRates(
+        RateCollectorInterface $subject,
+        \Closure               $proceed,
+        RateRequest            $request
+    ): RateCollectorInterface
     {
         if (!$this->isUseInventorySourceOrigin()) {
             return $proceed($request);
@@ -90,12 +149,11 @@ class CollectRatesPerInventorySource
         /**
          * Prepare final rate result
          */
-        /** @var PackageResult $result */
         $result = $this->packageResultFactory->create();
         foreach ($allResultRates as $rates) {
             $rateResult = $this->rateResultFactory->create();
             foreach ($rates as $rate) {
-                if ($rate instanceof Error || in_array($rate->getMethod(), $availableInAllResultsMethods)) {
+                if ($this->isAppendFailedRate($rate) || in_array($rate->getMethod(), $availableInAllResultsMethods)) {
                     $rateResult->append($rate);
                 }
             }
@@ -108,7 +166,11 @@ class CollectRatesPerInventorySource
         return $subject;
     }
 
-    //@TODO check what source mode is used
+    /**
+     * Is origin request replacement active
+     *
+     * @return bool
+     */
     private function isUseInventorySourceOrigin(): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_USE_INVENTORY_SOURCE_ORIGIN);
@@ -150,5 +212,25 @@ class CollectRatesPerInventorySource
         }
 
         return $requests;
+    }
+
+    /**
+     * Check if failed rate should be appended to the result
+     *
+     * @param mixed $rate
+     * @return bool
+     */
+    public function isAppendFailedRate(AbstractResult $rate): bool
+    {
+        if (!$rate instanceof Error) {
+            return false;
+        }
+
+        $carrier = $this->carrierFactory->getIfActive($rate->getCarrier());
+        if ($carrier || $carrier->getConfigData('showmethod') == 0) {
+            return false;
+        }
+
+        return true;
     }
 }

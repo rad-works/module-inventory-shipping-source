@@ -17,14 +17,50 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
  */
 class RequestBuilder implements RequestBuilderInterface
 {
+    /**
+     * @var AddressInterfaceFactory
+     */
+    private AddressInterfaceFactory $addressFactory;
+
+    /**
+     * @var StockByWebsiteIdResolverInterface
+     */
+    private StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver;
+
+    /**
+     * @var ItemRequestInterfaceFactory
+     */
+    private ItemRequestInterfaceFactory $itemRequestFactory;
+
+    /**
+     * @var InventoryRequestInterfaceFactory
+     */
+    private InventoryRequestInterfaceFactory $inventoryRequestFactory;
+
+    /**
+     * @var InventoryRequestExtensionInterfaceFactory
+     */
+    private InventoryRequestExtensionInterfaceFactory $inventoryRequestExtensionFactory;
+
+    /**
+     * @param AddressInterfaceFactory $addressFactory
+     * @param ItemRequestInterfaceFactory $itemRequestFactory
+     * @param InventoryRequestInterfaceFactory $inventoryRequestFactory
+     * @param InventoryRequestExtensionInterfaceFactory $inventoryRequestExtensionFactory
+     * @param StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver
+     */
     public function __construct(
-        private readonly AddressInterfaceFactory                   $addressFactory,
-        private readonly ItemRequestInterfaceFactory               $itemRequestFactory,
-        private readonly InventoryRequestInterfaceFactory          $inventoryRequestFactory,
-        private readonly InventoryRequestExtensionInterfaceFactory $inventoryRequestExtensionFactory,
-        private readonly StockByWebsiteIdResolverInterface         $stockByWebsiteIdResolver
-    )
-    {
+        AddressInterfaceFactory                   $addressFactory,
+        ItemRequestInterfaceFactory               $itemRequestFactory,
+        InventoryRequestInterfaceFactory          $inventoryRequestFactory,
+        InventoryRequestExtensionInterfaceFactory $inventoryRequestExtensionFactory,
+        StockByWebsiteIdResolverInterface         $stockByWebsiteIdResolver
+    ) {
+        $this->inventoryRequestExtensionFactory = $inventoryRequestExtensionFactory;
+        $this->inventoryRequestFactory = $inventoryRequestFactory;
+        $this->itemRequestFactory = $itemRequestFactory;
+        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
+        $this->addressFactory = $addressFactory;
     }
 
     /**
@@ -64,7 +100,7 @@ class RequestBuilder implements RequestBuilderInterface
      * Get items that can be shipped
      *
      * @param RateRequest $request
-     * @return CartItemInterface[]
+     * @return array
      */
     private function getItems(RateRequest $request): array
     {
