@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace DmiRud\InventoryShippingSource\Model\Inventory;
+namespace RadWorks\InventoryShippingSource\Model\Inventory;
 
 use Magento\InventorySourceSelectionApi\Api\Data\SourceSelectionItemInterface;
 use Magento\Quote\Model\Quote\Address\RateRequest;

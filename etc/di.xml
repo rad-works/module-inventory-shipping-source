@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="DmiRud\InventoryShippingSource\Model\Inventory\RequestBuilderInterface"
-                type="DmiRud\InventoryShippingSource\Model\Inventory\RequestBuilder"/>
-    <preference for="DmiRud\InventoryShippingSource\Model\Inventory\SourceSelectionProviderInterface"
-                type="DmiRud\InventoryShippingSource\Model\Inventory\SourceSelectionProvider"/>
+    <preference for="RadWorks\InventoryShippingSource\Model\Inventory\RequestBuilderInterface"
+                type="RadWorks\InventoryShippingSource\Model\Inventory\RequestBuilder"/>
+    <preference for="RadWorks\InventoryShippingSource\Model\Inventory\SourceSelectionProviderInterface"
+                type="RadWorks\InventoryShippingSource\Model\Inventory\SourceSelectionProvider"/>
     <type name="Magento\Quote\Model\Quote\Address\RateCollectorInterface">
-        <plugin name="DmiRud_ShipStation::collect_rates_per_source"
-                type="DmiRud\InventoryShippingSource\Plugin\Magento\Quote\Model\Quote\Address\RateCollectorInterface\CollectRatesPerInventorySource"/>
+        <plugin name="RadWorks_ShipStation::collect_rates_per_source"
+                type="RadWorks\InventoryShippingSource\Plugin\Magento\Quote\Model\Quote\Address\RateCollectorInterface\CollectRatesPerInventorySource"/>
     </type>
 </config>

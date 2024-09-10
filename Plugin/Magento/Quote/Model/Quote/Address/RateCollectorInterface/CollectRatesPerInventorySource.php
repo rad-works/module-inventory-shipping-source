@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace DmiRud\InventoryShippingSource\Plugin\Magento\Quote\Model\Quote\Address\RateCollectorInterface;
+namespace RadWorks\InventoryShippingSource\Plugin\Magento\Quote\Model\Quote\Address\RateCollectorInterface;
 
-use DmiRud\InventoryShippingSource\Model\Inventory\SourceSelectionProviderInterface;
+use RadWorks\InventoryShippingSource\Model\Inventory\SourceSelectionProviderInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;

@@ -4,7 +4,7 @@
     <default>
         <shipping>
             <rates_collector>
-                <use_inventory_source_origin>1</use_inventory_source_origin>
+                <use_inventory_source_origin>0</use_inventory_source_origin>
             </rates_collector>
         </shipping>
     </default>

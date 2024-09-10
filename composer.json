@@ -1,6 +1,6 @@
 {
-  "name": "dmi-rud/module-inventory-shipping-source",
-  "version": "0.3.0",
+  "name": "rad-works/module-inventory-shipping-source",
+  "version": "0.4.0",
   "description": "",
   "type": "magento2-module",
   "require": {
@@ -24,7 +24,7 @@
       "registration.php"
     ],
     "psr-4": {
-      "DmiRud\\InventoryShippingSource\\": ""
+      "RadWorks\\InventoryShippingSource\\": ""
     }
   }
 }
