@@ -204,6 +204,7 @@ class CollectRatesPerInventorySource
                 }
 
                 $sourceCartItem = clone $cartItem;
+                $sourceCartItem->setQuote($cartItem->getQuote());
                 $sourceCartItems[] = $sourceCartItem->setQty($items[$cartItem->getSku()]);
             }
 
@@ -227,7 +228,7 @@ class CollectRatesPerInventorySource
         }
 
         $carrier = $this->carrierFactory->getIfActive($rate->getCarrier());
-        if ($carrier || $carrier->getConfigData('showmethod') == 0) {
+        if ($carrier && $carrier->getConfigData('showmethod') == 0) {
             return false;
         }
 
