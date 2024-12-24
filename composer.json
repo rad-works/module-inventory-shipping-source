@@ -1,10 +1,10 @@
 {
   "name": "rad-works/module-inventory-shipping-source",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "",
   "type": "magento2-module",
   "require": {
-    "php": "~8.1.0",
+    "php": ">=8.1.0",
     "magento/module-inventory-shipping": "*",
     "magento/module-inventory-api": "*",
     "magento/module-inventory-catalog-api": "*",
