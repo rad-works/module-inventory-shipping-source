@@ -18,8 +18,7 @@ use Magento\Shipping\Model\Rate\ResultFactory;
 /**
  * @TODO coding standards
  * @TODO unit/functional/integration tests
- * @TODO new configuration: calculation algorithm, error notification, replace origin for single or any item, etc.
- * @TODO rename module/repository
+ * @TODO new configuration: error notification, replace origin for single or any item, etc.
  * @TODO test with other UPS services
  * @TODO check what source mode is used
  */
@@ -147,7 +146,7 @@ class CollectRatesPerInventorySource
         }
 
         /**
-         * Prepare final rate result
+         * Prepare a final rate result
          */
         $result = $this->packageResultFactory->create();
         foreach ($allResultRates as $rates) {

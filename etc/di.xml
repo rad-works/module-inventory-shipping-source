@@ -6,7 +6,7 @@
     <preference for="RadWorks\InventoryShippingSource\Model\Inventory\SourceSelectionProviderInterface"
                 type="RadWorks\InventoryShippingSource\Model\Inventory\SourceSelectionProvider"/>
     <type name="Magento\Quote\Model\Quote\Address\RateCollectorInterface">
-        <plugin name="RadWorks_ShipStation::collect_rates_per_source"
+        <plugin name="RadWorks_InventoryShippingSource::collect_rates_per_source"
                 type="RadWorks\InventoryShippingSource\Plugin\Magento\Quote\Model\Quote\Address\RateCollectorInterface\CollectRatesPerInventorySource"/>
     </type>
 </config>
