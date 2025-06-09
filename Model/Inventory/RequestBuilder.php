@@ -85,7 +85,7 @@ class RequestBuilder implements RequestBuilderInterface
         $extensionAttributes = $this->inventoryRequestExtensionFactory->create();
         $extensionAttributes->setDestinationAddress($this->addressFactory->create([
             'country' => $request->getDestCountryId(),
-            'postcode' => $request->getDestPostcode(),
+            'postcode' => $request->getDestPostcode() ?? '',
             'street' => $request->getDestStreet() ?: '',
             'region' => $request->getDestRegionId() ?: '',
             'city' => $request->getDestCity() ?: ''
