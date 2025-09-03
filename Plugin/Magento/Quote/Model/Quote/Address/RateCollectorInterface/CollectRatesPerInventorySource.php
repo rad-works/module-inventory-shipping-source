@@ -115,6 +115,8 @@ class CollectRatesPerInventorySource
         /**
          * Collect rates for each source rate request
          */
+        $allResultRateMethods = [];
+        $requestsCount = count($requests);
         foreach ($requests as $sourceRequest) {
             $proceed($sourceRequest);
             $allResultRates[] = $subject->getResult()->getAllRates();
@@ -135,9 +137,11 @@ class CollectRatesPerInventorySource
                     }
                 }
 
-                if ($isAvailableInAllResults) {
+                $allResultRateMethods[$method] = ($allResultRateMethods[$method] ?? 0) + 1;
+                if ($isAvailableInAllResults && $requestsCount == $allResultRateMethods[$method]) {
                     $availableInAllResultsMethods[] = $method;
                 }
+
             }
             /**
              * Remove all rates from the result to process next rates of the next request
@@ -149,6 +153,7 @@ class CollectRatesPerInventorySource
          * Prepare a final rate result
          */
         $result = $this->packageResultFactory->create();
+
         foreach ($allResultRates as $rates) {
             $rateResult = $this->rateResultFactory->create();
             foreach ($rates as $rate) {
@@ -157,7 +162,12 @@ class CollectRatesPerInventorySource
                 }
             }
 
-            $result->appendPackageResult($rateResult, 1);
+            /**
+             * Ensure new rate result has a rate/error
+             */
+            if ($rateResult->getAllRates()) {
+                $result->appendPackageResult($rateResult, 1);
+            }
         }
 
         $subject->getResult()->appendResult($result, true);
